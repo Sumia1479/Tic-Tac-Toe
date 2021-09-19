@@ -1,0 +1,118 @@
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+
+char gameboard[3][3] = {{'1','2','3'},{'4','5','6'},{'7','8','9'}};
+
+int current_players_turn;
+char current_players_marker;
+int row,col;
+
+
+void display_gameboard()
+{
+cout << " " << gameboard[0][0] <<  " | " << gameboard[0][1] << " | " << gameboard[0][2] << endl;
+cout << "___|___|___" << endl;
+cout << " " << gameboard[1][0] <<  " | " << gameboard[1][1] << " | " << gameboard[1][2] << endl;
+cout << "___|___|___" << endl;
+cout << " " << gameboard[2][0] <<  " | " << gameboard[2][1] << " | " << gameboard[2][2] << endl;
+}
+
+void placeMarker(int slot)
+{
+  switch(slot)
+  {
+  case 1: row = 0; col = 0; break;
+  case 2: row = 0; col = 1; break;
+  case 3: row = 0; col = 2; break;
+  case 4: row = 1; col = 0; break;
+  case 5: row = 1; col = 1; break;
+  case 6: row = 1; col = 2; break;
+  case 7: row = 2; col = 0; break;
+  case 8: row = 2; col = 1; break;
+  case 9: row = 2; col = 2; break;
+  default:
+    cout<<"Error: invalid move";
+  }
+  gameboard[row][col] = current_players_marker; 
+} 
+
+bool gameover()
+{
+  for(int i=0; i<3; i++)
+  {
+    if((gameboard[i][0] == gameboard[i][1] && gameboard[i][0] == gameboard[i][2]) || (gameboard[0][i] == gameboard[1][i] && gameboard[0][i] == gameboard[2][i]))
+    {
+      return current_players_turn;
+    }
+  }
+
+  if((gameboard[0][0] == gameboard[1][1] && gameboard[0][0] == gameboard[2][2]) || (gameboard[0][2] == gameboard[1][1] && gameboard[0][2] == gameboard[2][0]))
+  {
+    return current_players_turn;
+  }
+  return 0;
+}
+
+void game()
+{
+  cout << "Player one, Choose your marker, X or O: " << endl;
+  char marker_player1;
+  cin >> marker_player1;
+  current_players_turn = 1;
+  current_players_marker = marker_player1;
+  
+  int winner;
+
+  for(int i = 0; i < 9; i++)
+  {
+    cout << "It's Player " << current_players_turn << "'s turn. Enter a free your slot number: " << endl;
+    int slot;
+    cin >> slot;
+
+    placeMarker(slot);
+
+    winner = gameover();  
+
+    if(winner == 1)
+    {
+      cout << "Player one is the winner!"; 
+      break;
+    } 
+    if(winner == 2)
+    {
+      cout << "Player two is the winner!";
+      break;
+    }
+    
+    if(current_players_turn == 1)
+    {
+      current_players_turn++;
+    }
+    else if(current_players_turn == 2)
+    {
+      current_players_turn--;
+    }
+
+    if(current_players_marker == 'X')
+    {
+      current_players_marker = 'O';  
+    }
+    else
+    {
+      current_players_marker = 'X';  
+    }
+
+    display_gameboard();
+  }
+  if(winner == 0)
+  {
+    cout << "It's a tie";
+  } 
+}
+
+int main()
+{
+game();
+return 0;
+}
